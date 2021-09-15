@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const arr = require("../seed");
 
-router.get("/users", (req, res) => {
-  res.status(200).json();
+router.get("/", (req, res) => {
+  res.status(200).json(arr);
 });
 
 module.exports = router;
