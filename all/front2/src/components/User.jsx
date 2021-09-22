@@ -8,46 +8,50 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
-const User = ()=>{
+const User = () => {
     const [users, setUsers] = useState([])
 
-    useEffect(()=> {
+    useEffect(() => {
         axios.get('http://localhost:4000/api/users')
-        .then((response)=> {
-            
-            setUsers(response.data)
-        })
-        .catch((error=> {
-            console.log(error)
-        }))
-    },[])
+            .then((response) => {
 
-    return(
+                setUsers(response.data)
+            })
+            .catch((error => {
+                console.log(error)
+            }))
+
+        return () => {
+
+        }
+    }, [])
+
+    return (
         <>
-        
-            {users.map((user)=> {
-              return (
-              
-                <List>
-                    <ListItem  alignItems="flex-start">
-                        <ListItemAvatar>
-                            <Avatar alt="Barak Obama" src={user.pic} />
-                        </ListItemAvatar>
-                        <ListItemText
-                        primary={user.name}
-                        secondary={
-                            <Typography
-                                component="span"
-                                variant="body2"
-                                color="textPrimary"
-                            >{user.description}
-                            </Typography>
-                            }
-                        />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                </List>
-              ) 
+
+            {users.map((user) => {
+                return (
+
+                    <List>
+                        <ListItem alignItems="flex-start">
+                            <ListItemAvatar>
+                                <Avatar alt="Barak Obama" src={user.pic} />
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={user.name}
+                                secondary={
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        color="textPrimary"
+                                    >{user.description}
+                                    </Typography>
+                                }
+                            />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                    </List>
+                )
             })}
         </>
     )
