@@ -6,6 +6,7 @@ import User from "./components/User";
 import { Switch, Route, Link } from "react-router-dom";
 import HidenText from "./components/HidenText";
 import TodoList from "./components/todo";
+import UserDeatail from "./components/UserDeatail";
 
 function App() {
   return (
@@ -15,10 +16,15 @@ function App() {
       <Link to="/users">User</Link>
       <Link to="/todolist">todolist</Link>
       <Switch>
-        <Route path="/prueba" render={() => <Prueba />} />
-        <Route path="/home" render={() => <Home />} />
-        <Route path="/users" render={() => <User />} />
-        <Route path="/todolist" render={() => <TodoList></TodoList>}></Route>
+        <Route exact={true} path="/prueba" render={() => <Prueba />} />
+        <Route exact={true} path="/home" render={() => <Home />} />
+        <Route exact={true} path="/users" render={() => <User />} />
+        <Route exact={true} path="/users/:id" render={() => <UserDeatail />} />
+        <Route
+          exact={true}
+          path="/todolist"
+          render={() => <TodoList></TodoList>}
+        ></Route>
       </Switch>
       <HidenText text="Hello World" />
     </>

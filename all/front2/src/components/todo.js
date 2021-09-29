@@ -1,80 +1,155 @@
+import { useState } from "react";
+import styled from "styled-components";
 
-import { useState } from "react"
-import styled from "styled-components"
+const TodoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+  width: 20%;
+`;
 
 const TodoText = styled.h2`
-    background-color: yellow;
-    font-size: 2em;
-    text-decoration: ${props => props.finished ? "line-through" : "none"};
-    &:hover {
-        cursor: pointer;
-        font-size: 2.2em;
-    }
+  background-color: yellow;
+  font-size: 2em;
+  text-decoration: ${(props) => (props.finished ? "line-through" : "none")};
+  &:hover {
+    cursor: pointer;
+    font-size: 2.2em;
+  }
+`;
+
+const DeleteIcon = styled.img`
+  width: 20px;
+  height: 20px;
 `;
 
 const TodoList = () => {
-    const [textTodo, setTextTodo] = useState("")
+  const [textTodo, setTextTodo] = useState("");
+  const [filterTodoList, setFilterTodoList] = useState([]);
 
-    const [toDoList, setToDoList] = useState([{
-        id: "1",
-        nombre: "Pasear al perro",
-        finished: true
+  const [toDoList, setToDoList] = useState([
+    {
+      id: "1",
+      nombre: "Pasear al perro",
+      finished: true,
     },
     {
-        id: "2",
-        nombre: "Sacar la basura",
-        finished: false
-    }
-    ])
+      id: "2",
+      nombre: "Sacar la basura",
+      finished: false,
+    },
+  ]);
 
-    const changeFinish = (index) => {
-        const element = toDoList[index]
-        element.finished = !element.finished
+  const changeFinish = (index) => {
+    //[1,{finished : true}},3]
+    // 0 1 2
+    const element = toDoList[index];
+    element.finished = !element.finished;
 
-        setToDoList([...toDoList])
-    }
+    setToDoList([...toDoList]);
+  };
 
-    const addTodoElement = () => {
-
-        if(!textTodo){
-            return;
-        }
-
-        const ultimo = toDoList[toDoList.length - 1]
-        toDoList.push({
-            id: (parseInt(ultimo.id) + 1).toString(),
-            nombre: textTodo,
-            finished: false
-        })
-
-        setTextTodo("")
-
-        setToDoList([...toDoList])
+  const addTodoElement = () => {
+    if (!textTodo) {
+      return;
     }
 
-    return (
+    const ultimo = toDoList[toDoList.length - 1];
 
-        <div>
-            <input value={textTodo} onChange={e => setTextTodo(e.target.value)} />
-            <button onClick={() => addTodoElement()}>Add todo element</button>
-            {toDoList.map((item, index) => {
-                return (
-                    <div key={item.id}>
-                        <TodoText onClick={() => changeFinish(index)} finished={item.finished}>{item.nombre} {item.id}</TodoText>
-                    </div>
-                )
-            })}
+    const newid = parseInt(ultimo ? ultimo.id : 0);
 
-        </div>)
-}
+    toDoList.push({
+      id: (newid + 1).toString(),
+      nombre: textTodo,
+      finished: false,
+    });
 
+    setTextTodo("");
+
+    setToDoList([...toDoList]);
+  };
+
+  const findElementsByName = () => {
+    /*
+    let lista = [A,AB,D,AE,F]
+
+    "AB".includes("A")
+    [
+    {
+      id: "1",
+      nombre: "Pasear al perro",
+      finished: true,
+    },
+    {
+      id: "2",
+      nombre: "Sacar la basura",
+      finished: false,
+    },
+  ]
+    */
+    let newElements = [];
+    for (let i = 0; i < toDoList.length; i++) {
+      const element = toDoList[i];
+      if (element.nombre.includes(textTodo)) {
+        newElements.push(element);
+      }
+    }
+
+    setFilterTodoList(newElements);
+  };
+
+  const handleDelete = (id) => {
+    let newTodoList = [];
+    for (let i = 0; i < toDoList.length; i++) {
+      const element = toDoList[i];
+      if (element.id != id) {
+        newTodoList.push(element);
+      }
+    }
+    setToDoList(newTodoList);
+    setFilterTodoList([]);
+  };
+
+  return (
+    <>
+      <input value={textTodo} onChange={(e) => setTextTodo(e.target.value)} />
+      <button onClick={() => addTodoElement()}>Add todo element</button>
+      <button onClick={() => findElementsByName()}>Find todo element</button>
+      {toDoList.map((item, index) => {
+        return (
+          <TodoContainer key={item.id}>
+            <DeleteIcon
+              src={"https://cdn-icons-png.flaticon.com/512/54/54324.png"}
+              onClick={() => handleDelete(item.id)}
+            />
+            <TodoText
+              onClick={() => changeFinish(index)}
+              finished={item.finished}
+            >
+              {item.nombre} {item.id}
+            </TodoText>
+          </TodoContainer>
+        );
+      })}
+      <h1>Elementos filtrados</h1>
+      {filterTodoList.map((item, index) => {
+        return (
+          <TodoContainer key={item.id}>
+            <TodoText finished={item.finished}>
+              {item.nombre} {item.id}
+            </TodoText>
+          </TodoContainer>
+        );
+      })}
+    </>
+  );
+};
 
 export default TodoList;
 
-
-
-
-{/* toDoList => 
+{
+  /* toDoList => 
            [
                {
                     id: "1",
@@ -106,4 +181,5 @@ export default TodoList;
         }) => [{id :"1",nombre: "Pasear al perro", horas : "18:00 19:00 20:00" }]
 
         
-        */}
+        */
+}
