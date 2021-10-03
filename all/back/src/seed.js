@@ -1,8 +1,8 @@
-const arr = [];
-
+let arr = [];
 
 for (let i = 0; i < 20; i++) {
   arr.push({
+    id: i,
     pic: "https://clipart-best.com/img/face/face-clip-art-23.png",
     name: "Barack Obama " + i,
     description:

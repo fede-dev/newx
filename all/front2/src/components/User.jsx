@@ -7,8 +7,24 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
+import styled from "styled-components";
 
 import { useHistory } from "react-router-dom";
+
+const DeletePresident = styled.img`
+   width: 20px;
+   height: 20px;
+   margin-bottom:20px;
+   background-color: yellow;
+`
+
+const ListContainer = styled(ListItem)`
+  display: flex;
+  flex-direction: column;
+  justify-content:space-around;
+  margin-left: 40px;
+  width: 100%;
+`
 
 const User = () => {
   const [users, setUsers] = useState([]);
@@ -32,13 +48,27 @@ const User = () => {
     return () => {};
   }, []);
 
+  const handleDelete = (userId)=> {
+    // const deleteUser = setUsers(userId).find(item => item.id == userID)
+    // setUsers(...deleteUser)
+    // console.log(deleteUser)
+    let newArr = []
+    for (let i = 0; i < users.length; i++) {
+      const element = users[i];
+      if(element.id != userId){
+        newArr.push(element)
+      }
+    }
+    setUsers(newArr)
+  }
+
   return (
     <>
       <List>
         {users.map((user) => {
           return (
             <>
-              <ListItem
+              <ListContainer
                 alignItems="flex-start"
                 onClick={() => handleSingleCard(user.id)}
               >
@@ -57,7 +87,8 @@ const User = () => {
                     </Typography>
                   }
                 />
-              </ListItem>
+              </ListContainer>
+              <DeletePresident src={"https://cdn-icons-png.flaticon.com/512/54/54324.png"} onClick={()=> handleDelete(user.id)}/>
               <Divider variant="inset" component="li" />
             </>
           );

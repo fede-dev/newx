@@ -7,14 +7,26 @@ import { Switch, Route, Link } from "react-router-dom";
 import HidenText from "./components/HidenText";
 import TodoList from "./components/todo";
 import UserDeatail from "./components/UserDeatail";
+import styled from "styled-components";
+
+const LinkContainer = styled.div`
+  width: 25%;
+  height: 30px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: yellow;
+`;
 
 function App() {
   return (
     <>
-      <Link to="/home">Home</Link>
-      <Link to="/prueba">Prueba</Link>
-      <Link to="/users">User</Link>
-      <Link to="/todolist">todolist</Link>
+      <LinkContainer>
+        <Link to="/home">Home</Link>
+        <Link to="/prueba">Prueba</Link>
+        <Link to="/users">User</Link>
+        <Link to="/todolist">ToDoList</Link>
+      </LinkContainer>
       <Switch>
         <Route exact={true} path="/prueba" render={() => <Prueba />} />
         <Route exact={true} path="/home" render={() => <Home />} />

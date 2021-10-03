@@ -28,25 +28,13 @@ const TodoList = () => {
   const [textTodo, setTextTodo] = useState("");
   const [filterTodoList, setFilterTodoList] = useState([]);
 
-  const [toDoList, setToDoList] = useState([
-    {
-      id: "1",
-      nombre: "Pasear al perro",
-      finished: true,
-    },
-    {
-      id: "2",
-      nombre: "Sacar la basura",
-      finished: false,
-    },
-  ]);
+  const [toDoList, setToDoList] = useState([]);
 
   const changeFinish = (index) => {
     //[1,{finished : true}},3]
     // 0 1 2
     const element = toDoList[index];
     element.finished = !element.finished;
-
     setToDoList([...toDoList]);
   };
 
@@ -71,23 +59,6 @@ const TodoList = () => {
   };
 
   const findElementsByName = () => {
-    /*
-    let lista = [A,AB,D,AE,F]
-
-    "AB".includes("A")
-    [
-    {
-      id: "1",
-      nombre: "Pasear al perro",
-      finished: true,
-    },
-    {
-      id: "2",
-      nombre: "Sacar la basura",
-      finished: false,
-    },
-  ]
-    */
     let newElements = [];
     for (let i = 0; i < toDoList.length; i++) {
       const element = toDoList[i];
@@ -182,4 +153,21 @@ export default TodoList;
 
         
         */
+  /*
+    let lista = [A,AB,D,AE,F]
+
+    "AB".includes("A")
+    [
+    {
+      id: "1",
+      nombre: "Pasear al perro",
+      finished: true,
+    },
+    {
+      id: "2",
+      nombre: "Sacar la basura",
+      finished: false,
+    },
+  ]
+    */
 }
