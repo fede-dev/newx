@@ -36,6 +36,17 @@ const User = () => {
   };
 
   useEffect(() => {
+    getUser() 
+
+    return () => {};
+  }, []);
+
+  const handleDelete = async(userId)=> {
+   await axios.delete("http://localhost:4000/api/users/" + userId)
+   getUser()
+  }
+
+  const getUser = ()=>{
     axios
       .get("http://localhost:4000/api/users")
       .then((response) => {
@@ -44,22 +55,6 @@ const User = () => {
       .catch((error) => {
         console.log(error);
       });
-
-    return () => {};
-  }, []);
-
-  const handleDelete = (userId)=> {
-    // const deleteUser = setUsers(userId).find(item => item.id == userID)
-    // setUsers(...deleteUser)
-    // console.log(deleteUser)
-    let newArr = []
-    for (let i = 0; i < users.length; i++) {
-      const element = users[i];
-      if(element.id != userId){
-        newArr.push(element)
-      }
-    }
-    setUsers(newArr)
   }
 
   return (

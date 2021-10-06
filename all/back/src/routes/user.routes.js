@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const arr = require("../seed");
+let arr = require("../seed");
 
 router.get("/", (req, res) => {
   res.status(200).json(arr);
@@ -27,12 +27,14 @@ router.get("/:id", (req, res) => {
 router.post("/:id", (req, res) => {
   let user;
   const userId = req.params.id;
-  const newName = req.body.name;
+  const president = req.body;
   for (let i = 0; i < arr.length; i++) {
     const element = arr[i];
     if (element.id == userId) {
       user = element;
-      user.name = newName;
+      user.name = president.name;
+      user.description = president.description;
+      user.pic = president.pic;
     }
   }
 
@@ -41,6 +43,14 @@ router.post("/:id", (req, res) => {
   }
 
   res.status(200).json(user);
+});
+
+router.delete("/:id", (req, res) => {
+  userId = req.params.id;
+  const presidents = arr.filter((item) => item.id != userId);
+  //console.log(presidents);
+  arr = presidents;
+  res.status(200).json({ msg: "ok" });
 });
 
 module.exports = router;

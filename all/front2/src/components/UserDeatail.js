@@ -21,34 +21,19 @@ const Img = styled.img`
 
 const UserDeatail = () => {
   const params = useParams();
+  const history = useHistory();
+
   const [user, setUser] = useState({});
   const [username, setUsername] = useState("");
   const [description, setDescription] = useState("");
-  const history = useHistory();
+  const [pic, setPic] = useState("");
 
-  const changeName = () => {
-    axios
-      .post("http://localhost:4000/api/users/" + params.id, { name: username })
-      .then((result) => {
-        history.push("/users");
-      });
-  };
-
-  useEffect(() => {
-    let result = axios
-      .get("http://localhost:4000/api/users/" + params.id)
-      .then((result) => {
-        setUser(result.data);
-        setUsername(result.data.name);
-      });
-
-    return () => {};
-  }, []);
-
-  const changeDescription = () => {
+  const submit = () => {
     axios
       .post("http://localhost:4000/api/users/" + params.id, {
+        name: username,
         description: description,
+        pic: pic,
       })
       .then((result) => {
         history.push("/users");
@@ -60,7 +45,9 @@ const UserDeatail = () => {
       .get("http://localhost:4000/api/users/" + params.id)
       .then((result) => {
         setUser(result.data);
+        setUsername(result.data.name);
         setDescription(result.data.description);
+        setPic(result.data.pic);
       });
 
     return () => {};
@@ -69,7 +56,6 @@ const UserDeatail = () => {
   return (
     <>
       <Img src={user.pic} />
-      {/* <button onClick={() => changeImage()}>change image</button> */}
       <h2>
         Mr.President name´s: {username}
         <input
@@ -78,24 +64,21 @@ const UserDeatail = () => {
             setUsername(e.target.value);
           }}
         />
-        <button
-          onClick={() => {
-            changeName();
-          }}
-        >
-          Change Name
-        </button>
         <div>
-          {description}
           <input
-            value="new Description"
+            value={description}
             onChange={(e) => {
               setDescription(e.target.value);
             }}
           />
-          <button onClick={() => changeDescription()}>
-            Change Description
-          </button>
+        </div>
+        <div>
+          <input
+            value={pic}
+            onChange={(e) => {
+              setPic(e.target.value);
+            }}
+          />
         </div>
         {user && (
           <Container>
@@ -103,6 +86,7 @@ const UserDeatail = () => {
           </Container>
         )}
       </h2>
+      <button onClick={() => submit()}>salvar cmabios</button>
     </>
   );
 };
