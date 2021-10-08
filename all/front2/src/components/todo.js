@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import axios from 'axios'
 
 const TodoContainer = styled.div`
   display: flex;
@@ -25,11 +27,12 @@ const DeleteIcon = styled.img`
 `;
 
 const TodoList = () => {
+  const params = useParams();
   const [textTodo, setTextTodo] = useState("");
   const [filterTodoList, setFilterTodoList] = useState([]);
-
   const [toDoList, setToDoList] = useState([]);
 
+  console.log(textTodo)
   const changeFinish = (index) => {
     //[1,{finished : true}},3]
     // 0 1 2
@@ -38,24 +41,25 @@ const TodoList = () => {
     setToDoList([...toDoList]);
   };
 
-  const addTodoElement = () => {
-    if (!textTodo) {
-      return;
-    }
-
-    const ultimo = toDoList[toDoList.length - 1];
-
-    const newid = parseInt(ultimo ? ultimo.id : 0);
-
-    toDoList.push({
-      id: (newid + 1).toString(),
-      nombre: textTodo,
-      finished: false,
-    });
-
+  const addTodoElement = async(text) => {
+    const response = await axios.post("http://localhost:4000/api/todo/" + {
+      id: text.id,
+      nombre: text.nombre,
+      finished: text.finished
+    })
+  
+    // if (!textTodo) {
+    //   return;
+    // }
+    // const ultimo = toDoList[toDoList.length - 1];
+    // const newid = parseInt(ultimo ? ultimo.id : 0);
+    // toDoList.push({
+    //   id: (newid + 1).toString(),
+    //   nombre: textTodo,
+    //   finished: false,
+    // });
     setTextTodo("");
-
-    setToDoList([...toDoList]);
+    setToDoList([...response]);
   };
 
   const findElementsByName = () => {
@@ -66,21 +70,29 @@ const TodoList = () => {
         newElements.push(element);
       }
     }
-
     setFilterTodoList(newElements);
   };
 
-  const handleDelete = (id) => {
-    let newTodoList = [];
-    for (let i = 0; i < toDoList.length; i++) {
-      const element = toDoList[i];
-      if (element.id != id) {
-        newTodoList.push(element);
-      }
-    }
-    setToDoList(newTodoList);
+ 
+
+  const handleDelete = async(id) => {
+   const data = await axios.delete("http://localhost:4000/api/todo/" + params.id)
+    // let newTodoList = [];
+    // for (let i = 0; i < toDoList.length; i++) {
+    //   const element = toDoList[i];
+    //   if (element.id != id) {
+    //     newTodoList.push(element);
+    //   }
+    // }
+    setToDoList(data);
     setFilterTodoList([]);
   };
+
+  const getAll = async()=>{
+   const response = await axios.get("http://localhost:4000/api/todo/")
+   //console.log(response.data)
+   setToDoList([response.data])
+  }
 
   return (
     <>
@@ -113,6 +125,7 @@ const TodoList = () => {
           </TodoContainer>
         );
       })}
+      <button onClick={()=>getAll()}>todo Array</button>
     </>
   );
 };
